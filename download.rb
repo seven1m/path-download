@@ -1,6 +1,5 @@
 require 'json'
 require 'time'
-require 'pry'
 
 url = "https://184.169.128.183/3/moment/feed?limit=20&user_id=#{ENV['USER_ID']}&gs=1&oauth_token=#{ENV['OAUTH_TOKEN']}'
 
