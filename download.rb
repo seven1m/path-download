@@ -1,15 +1,3 @@
-# 1. run Path in the Android Emulator, proxying thru Charles SSL Proxy
-#    emulator -avd MyAVD -http-proxy http://localhost:8888
-#    (you'll need to install the charles SSL certificate in Android so that SSL requests are proxied and recorded)
-# 2. obtain the oauth token and user id from one of the requests
-# 3. USER_ID=abc123 OAUTH_TOKEN=xyz987 ruby download.rb
-# 4. ruby -rwebrick -e "s=WEBrick::HTTPServer.new(:Port => 3000, :DocumentRoot => Dir.pwd); trap(%q(INT)){ s.shutdown }; s.start"
-# 5. load http://localhost:3000 in your browser
-# 6. save the entire page (complete webpage, including assets) using the File -> Save menu item. Save the filename as "cached.html" in the same directory.
-# 7. load http://localhost:3000/cached.html in your browser to ensure it looks ok
-# 8. mkdir all && cd all
-# 9. wget --mirror -H -k -K --limit-rate=50K -U "Mozilla/5.0 (Windows NT 5.1; rv:31.0) Gecko/20100101 Firefox/31.0" http://localhost:3000/cached.html
-
 require 'json'
 require 'time'
 require 'pry'
