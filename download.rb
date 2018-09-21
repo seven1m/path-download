@@ -1,7 +1,7 @@
 require 'json'
 require 'time'
 
-url = "https://184.169.128.183/3/moment/feed?limit=20&user_id=#{ENV['USER_ID']}&gs=1&oauth_token=#{ENV['OAUTH_TOKEN']}"
+url = "https://api.path.com/6/moment/feed/home?emotions_with_comments=true&connection_type=WIFI&oauth_token=#{ENV['OAUTH_TOKEN']}&limit=20"
 
 def save_feed(feed)
   filename = 'feed.json'
@@ -34,9 +34,12 @@ while (result = `curl -k "#{url}"`)
         elsif values.is_a?(Hash)
           feed[key] ||= {}
           feed[key].merge! values
+        elsif key == 'ad_enabled'
+          # noop
         else
           puts '-' * 100
           puts 'unknown values type'
+          p key
           p values
         end
       end
