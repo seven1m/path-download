@@ -5,7 +5,7 @@ This is a very loose collection of stuff to assist in downloading your entire fe
 ## What You'll Need
 
 1. [Android Studio](https://developer.android.com/studio/)
-2. Charles SSL Proxy
+2. Charles SSL Proxy or another SSL proxy
 3. Ruby
 4. Patience
 
@@ -25,14 +25,29 @@ This is a very loose collection of stuff to assist in downloading your entire fe
 
 1. Install the Charles SSL certificate in the emulator. This was many steps, sorry. The Charles website has some help for doing it.
 
+1. In Charles, Choose Proxy menu, SSL Proxying Settings, and add `api.path.com:443` to the locations box.
+
 1. Launch Path and sign in.
 
 1. Watch the requests in Charles and copy the `oauth_token` from one of the requests.
 
-1. Download the feed using the ruby script in this repo.
+1. Run bundler in this directory:
 
    ```
-   OAUTH_TOKEN=abc123 ruby download.rb
+   gem install bundler
+   bundle install
+   ```
+
+1. Download the feed using the ruby script in this repo and the token you copied.
+
+   ```
+   OAUTH_TOKEN=abc123 ruby download_feed.rb
+   ```
+
+1. Download the assets:
+
+   ```
+   ruby download_assets.rb
    ```
 
 1. Start a local ruby web server.
@@ -43,19 +58,8 @@ This is a very loose collection of stuff to assist in downloading your entire fe
 
 1. Load http://localhost:3000 in your browser.
 
-1. Save the entire page (complete webpage, including assets) using the File -> Save menu item. Save the filename as "cached.html" in the same directory.
-
-1. Load http://localhost:3000/cached.html in your browser to ensure it looks ok. Also check inside the `cached_files` directory to ensure there are images there.
-
-1. Download everything using wget.
-
-   ```
-   mkdir all
-   cd all
-   wget --mirror -H -k -K --limit-rate=100K -U "Mozilla/5.0 (Windows NT 5.1; rv:31.0) Gecko/20100101 Firefox/31.0" http://localhost:3000/cached.html
-   ```
-
-That's it. Now you have a static, local copy of everything.
+That's it. Now you have a local copy of everything. The HTML page provided is only meant for making sure all the data
+is present. The raw data is available in `feed.json` and you can use the data however you wish!
 
 ## License
 

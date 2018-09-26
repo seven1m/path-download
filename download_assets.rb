@@ -10,7 +10,6 @@ def download(url)
   else
     puts `curl -o #{path} #{url}`
     puts "#{path} written"
-    sleep(rand * 2)
   end
 end
 
@@ -27,14 +26,23 @@ def fetch_photo(photo, video = nil)
              else
                photo['url'] + '/' + photo['original']['file']
              end
-  raise original if original !~ /\.(mov|mp4|jpg)\z/
+  raise original if original !~ /\.(mov|mp4|jpg|jpeg)\z/
   download(square)
   download(original)
 end
 
 feed = JSON.parse(File.read('feed.json'))
 
-feed['moments'].each do |moment|
+feed['users'].each do |uid, user|
+  if (photo = user['photo'])
+    fetch_photo(photo)
+  end
+end
+
+feed['moments'].each_with_index do |moment, index|
+  puts
+  puts '%.1f%% complete' % (index.to_f / feed['moments'].size * 100)
+  puts
   if (photo = moment['photo'])
     if photo['photos']
       photo['photos'].each { |p| fetch_photo(p) }

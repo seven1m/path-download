@@ -1,22 +1,25 @@
 var url = 'feed.json';
 
-var imgerr = "onerror='console.log(\"image failed to laod, probably due to rate limiting; load the page again until this goes away\")'"
-
 load(url);
 
+function local_src(url) {
+  return url.replace(/^https?:\/\//, '');
+}
+
 function get_user_photo(user) {
-  if(user && user.photo && user.photo.url && user.photo.ios && user.photo.ios['1x']) {
-    return '<img ' + imgerr + ' class="user-photo" src="' + user.photo.url + '/' + user.photo.ios['1x'].file + '">';
+  if(user && user.photo && user.photo.url && user.photo.ios && user.photo.ios['2x']) {
+    return '<img class="user-photo" src="' + local_src(user.photo.url) + '/' + user.photo.ios['2x'].file + '">';
   } else {
     return '';
   }
 }
 
 function photo_src(photo) {
+  var base = local_src(photo.url);
   if (photo.square) {
-    return photo.url + '/' + photo.square.file;
+    return base + '/' + photo.square.file;
   } else if(photo.ios && photo.ios['2x']) {
-    return photo.url + '/' + photo.ios['2x'].file;
+    return base + '/' + photo.ios['2x'].file;
   }
 }
 
@@ -51,7 +54,7 @@ function append_comments(item, item_html) {
           '<div class="comment-time">' + time.format('MM/DD/YYYY hh:mm a') + '</div>' +
           '<div class="user">' +
             user_photo + ' ' + user.first_name + ' ' + user.last_name +
-            ' <img ' + imgerr + ' src="img/' + emotion.emotion_type + '.png" class="emoji">' +
+            ' <img src="img/' + emotion.emotion_type + '.png" class="emoji">' +
           '</div>' +
         '</div>'
       );
@@ -83,10 +86,10 @@ function load(url) {
       }
       if (photos) {
         photos_html = photos.map(function(photo) {
-          return '<a href="' + photo.url + '/' + photo.original.file + '">' + '<img ' + imgerr + ' src="' + photo_src(photo) + '" class="img-responsive">' + '</a>'
+          return '<a href="' + local_src(photo.url) + '/' + photo.original.file + '">' + '<img src="' + photo_src(photo) + '" class="img-responsive">' + '</a>'
         }).join('<br>')
       } else if (item.video && item.video.photo) {
-        photos_html = '<a href="' + item.video.video.url + '/' + item.video.video.original.file + '">' + '<img ' + imgerr + ' src="' + photo_src(item.video.photo) + '" class="img-responsive">' + '</a>'
+        photos_html = '<a href="' + local_src(item.video.video.download_url) + '/' + item.video.video.original.file + '">' + '<img src="' + photo_src(item.video.photo) + '" class="img-responsive">' + '</a>'
       } else {
         photos_html = ''
       }
